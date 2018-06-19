@@ -17,5 +17,6 @@ app.post('/add', jsonParser, (req, res) => {
 
 app.listen(3000, () => {
   models.Choice.sync();
+  models.User.sync();
   console.log('listening');
 })
