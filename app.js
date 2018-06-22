@@ -10,13 +10,17 @@ var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
 app.get('/', (req, res) => {
-  models.testF('testing ya');
   res.json({'Register': '/user'});
 });
 
 app.post('/add', jsonParser, (req, res) => {
   console.log(req.body.test)
   res.json({'route': 'add'});
+});
+
+// view users
+app.get('/user', (req,res) => {
+  
 });
 
 // register user
@@ -31,6 +35,16 @@ app.post('/user', jsonParser, (req, res) => {
     }).then(console.log('User has been created'))
   });
   res.json({'route': 'add'});
+});
+
+// authenticate user
+app.post('/user/auth', jsonParser, (req, res) => {
+  bcrypt.compare(req.body.password, hash, function(err, res) {
+    models.User.findOne({
+      userName: req.body.userName,
+      password: res
+    }).then(console.log('authenticated!'))
+  });
 });
 
 app.listen(3000, () => {
