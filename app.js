@@ -20,7 +20,9 @@ app.post('/add', jsonParser, (req, res) => {
 
 // view users
 app.get('/user', (req,res) => {
-  
+  models.User.findAll({
+    attributes: ['userId', 'username'],
+  }).then(user => res.json(user));
 });
 
 // register user
