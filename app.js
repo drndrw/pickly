@@ -34,9 +34,9 @@ app.post('/user', jsonParser, (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email
-    }).then(console.log('User has been created'))
+    }).then(user => res.json({'status': 'Created', 'userId': user.get().userId, 'username': user.get().userName}))
+    .catch(res.json({'status': 'Error', 'error': 'Username or email already exists.'}))
   });
-  res.json({'route': 'add'});
 });
 
 // authenticate user
