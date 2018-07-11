@@ -34,8 +34,9 @@ app.post('/user', jsonParser, (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email
-    }).then(user => res.json({'status': 'Created', 'userId': user.get().userId, 'username': user.get().userName}))
-    .catch(res.json({'status': 'Error', 'error': 'Username or email already exists.'}))
+    }).then(user => res.json({'status': 'Created', 'userId': user.get().userId, 'username': user.get().userName}).end(), user => res.json({'status': 'Error', 'error': 'Username or email already exists.'}));
+    // .catch(res.json({'status': 'Error', 'error': 'Username or email already exists.'}))
+    // .catch(console.log('error stuff'))
   });
 });
 
