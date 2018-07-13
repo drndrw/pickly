@@ -4,6 +4,7 @@ require('dotenv').config();
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var models = require('./models.js');
+var jwt = require('jsonwebtoken');
 
 // bcrypt config
 var bcrypt = require('bcrypt');
@@ -43,8 +44,11 @@ app.post('/user/auth', jsonParser, (req, res) => {
   models.User.findOne({
     where: {userName: req.body.userName}
   }).then(user =>
-    bcrypt.compare(req.body.password, user.password, function(err, res) {
-      console.log(res);
+    bcrypt.compare(req.body.password, user.password, function(err, result) {
+      if (result) {
+        var token = jwt.sign({ user: req.body.userName}, 'testtoken');
+        res.json({'authToken': token});
+      }
     })
   );
 });
