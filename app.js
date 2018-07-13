@@ -40,12 +40,13 @@ app.post('/user', jsonParser, (req, res) => {
 
 // authenticate user
 app.post('/user/auth', jsonParser, (req, res) => {
-  bcrypt.compare(req.body.password, hash, function(err, res) {
-    models.User.findOne({
-      userName: req.body.userName,
-      password: res
-    }).then(console.log('authenticated!'))
-  });
+  models.User.findOne({
+    where: {userName: req.body.userName}
+  }).then(user =>
+    bcrypt.compare(req.body.password, user.password, function(err, res) {
+      console.log(res);
+    })
+  );
 });
 
 app.listen(3000, () => {
