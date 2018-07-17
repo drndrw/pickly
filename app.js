@@ -10,7 +10,24 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
-app.get('/', (req, res) => {
+// app.use(jsonParser, (req, res, next) => {
+//   console.log('hello');
+//   console.log(req.get('Authorization'));
+//   jwt.verify(req.body.authToken, 'testtoken', function(err, decoded) {
+//     console.log(decoded);
+//     console.log(err);
+//     next();
+//   });
+// });
+
+function verifyToken(req, res, next) {
+    jwt.verify(req.get('Authorization'), 'testtoken', function(err, decoded) {
+      console.log(decoded);
+      next();
+    });
+}
+
+app.get('/', verifyToken, (req, res) => {
   res.json({'Register': '/user'});
 });
 
@@ -20,7 +37,7 @@ app.post('/add', jsonParser, (req, res) => {
 });
 
 // view users
-app.get('/user', (req,res) => {
+app.get('/user', verifyToken, (req,res) => {
   models.User.findAll({
     attributes: ['userId', 'username'],
   }).then(user => res.json(user));
@@ -48,9 +65,20 @@ app.post('/user/auth', jsonParser, (req, res) => {
       if (result) {
         var token = jwt.sign({ user: req.body.userName}, 'testtoken');
         res.json({'authToken': token});
+      } else {
+        res.json({'error': 'Invalid token'})
       }
     })
   );
+});
+
+// validate jwt
+app.post('/user/verify', jsonParser, (req, res) => {
+  console.log(req.body.authToken);
+  jwt.verify(req.body.authToken, 'testtoken', function(err, decoded) {
+    console.log(decoded);
+    console.log(err);
+  });
 });
 
 app.listen(3000, () => {
