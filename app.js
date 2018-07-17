@@ -10,19 +10,9 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
-// app.use(jsonParser, (req, res, next) => {
-//   console.log('hello');
-//   console.log(req.get('Authorization'));
-//   jwt.verify(req.body.authToken, 'testtoken', function(err, decoded) {
-//     console.log(decoded);
-//     console.log(err);
-//     next();
-//   });
-// });
-
 function verifyToken(req, res, next) {
     jwt.verify(req.get('Authorization'), 'testtoken', function(err, decoded) {
-      console.log(decoded);
+      req.user = decoded;
       next();
     });
 }
@@ -41,6 +31,12 @@ app.get('/user', verifyToken, (req,res) => {
   models.User.findAll({
     attributes: ['userId', 'username'],
   }).then(user => res.json(user));
+});
+
+// view users
+app.get('/sample', verifyToken, (req,res,next) => {
+  console.log(req.user.user)
+  res.json({'test': 'route'});
 });
 
 // register user
