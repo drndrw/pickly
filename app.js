@@ -63,10 +63,10 @@ app.post('/user/auth', jsonParser, (req, res) => {
         var token = jwt.sign({ user: req.body.userName}, process.env.JWT_TOKEN);
         res.json({'authToken': token});
       } else {
-        res.json({'error': 'Invalid token'})
+        res.json({error: 'Invalid token'});
       }
     })
-  );
+  ).catch(user => res.json({error: 'Invalid username'}));
 });
 
 // validate jwt
