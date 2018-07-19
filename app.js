@@ -78,7 +78,7 @@ app.post('/user/verify', jsonParser, (req, res) => {
 });
 
 app.listen(3000, () => {
-  models.Choice.sync();
   models.User.sync();
+  models.Choice.sync();
   console.log('listening');
 })
