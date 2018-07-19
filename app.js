@@ -59,7 +59,7 @@ app.post('/user/auth', jsonParser, (req, res) => {
   }).then(user =>
     bcrypt.compare(req.body.password, user.password, function(err, result) {
       if (result) {
-        var token = jwt.sign({ user: req.body.userName}, 'testtoken');
+        var token = jwt.sign({ user: req.body.userName}, process.env.JWT_TOKEN);
         res.json({'authToken': token});
       } else {
         res.json({'error': 'Invalid token'})
@@ -71,7 +71,7 @@ app.post('/user/auth', jsonParser, (req, res) => {
 // validate jwt
 app.post('/user/verify', jsonParser, (req, res) => {
   console.log(req.body.authToken);
-  jwt.verify(req.body.authToken, 'testtoken', function(err, decoded) {
+  jwt.verify(req.body.authToken, process.env.JWT_TOKEN, function(err, decoded) {
     console.log(decoded);
     console.log(err);
   });
