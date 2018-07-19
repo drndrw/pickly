@@ -23,22 +23,6 @@ Choice.belongsTo(User, {foreignKey: 'choiceCreatorId'});
 module.exports = {
   User : User,
   Choice: Choice,
-  // User : sequelize.define('user', {
-  //     userId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  //     userName: {type: Sequelize.STRING, unique: true},
-  //     password: {type: Sequelize.STRING},
-  //     firstName: Sequelize.STRING,
-  //     lastName: Sequelize.STRING,
-  //     email: {type: Sequelize.STRING, unique: true}
-  // }),
-  // Choice : sequelize.define('choice', {
-  //     choiceId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  //     choiceCreatorId: Sequelize.INTEGER,
-  //     choiceName: Sequelize.STRING,
-  //     choiceAddress: Sequelize.STRING,
-  //     choiceGenre: Sequelize.STRING
-  // }),
-  // Choice.belongsTo(User, {foreignKey: 'userName'}),
   dbSync : sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
