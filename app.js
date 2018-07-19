@@ -47,7 +47,8 @@ app.post('/user', jsonParser, (req, res) => {
       password: hash,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      email: req.body.email
+      email: req.body.email,
+      permission: 0
     }).then(user => res.json({'status': 'Created', 'userId': user.get().userId, 'username': user.get().userName}).end(), user => res.json({'status': 'Error', 'error': 'Username or email already exists.'}));
   });
 });
