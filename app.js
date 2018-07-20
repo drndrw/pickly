@@ -11,13 +11,14 @@ var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
 function verifyToken(req, res, next) {
-    jwt.verify(req.get('Authorization'), 'testtoken', function(err, decoded) {
+    jwt.verify(req.get('Authorization'), process.env.JWT_TOKEN, function(err, decoded) {
       req.user = decoded;
       next();
     });
 }
 
 app.get('/', verifyToken, (req, res) => {
+  console.log(process.hrtime());
   res.json({'Register': '/user'});
 });
 
@@ -60,7 +61,7 @@ app.post('/user/auth', jsonParser, (req, res) => {
   }).then(user =>
     bcrypt.compare(req.body.password, user.password, function(err, result) {
       if (result) {
-        var token = jwt.sign({ user: req.body.userName}, process.env.JWT_TOKEN);
+        var token = jwt.sign({user: user.userId, permission: user.permission, exp: 1234567 }, process.env.JWT_TOKEN);
         res.json({'authToken': token});
       } else {
         res.json({error: 'Invalid token'});
