@@ -12,11 +12,6 @@ const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
 function verifyToken(req, res, next) {
     jwt.verify(req.get('Authorization'), process.env.JWT_TOKEN, function(err, decoded) {
-      console.log('TOKEN ISSUED:')
-      console.log(decoded);
-      console.log(err);
-      console.log('JS TIME:')
-      console.log(new Date().getTime());
       req.user = decoded;
       next();
     });
@@ -75,15 +70,6 @@ app.post('/user/auth', jsonParser, (req, res) => {
       }
     })
   ).catch(user => res.json({error: 'Invalid username'}));
-});
-
-// validate jwt
-app.post('/user/verify', jsonParser, (req, res) => {
-  console.log(req.body.authToken);
-  jwt.verify(req.body.authToken, process.env.JWT_TOKEN, function(err, decoded) {
-    console.log(decoded);
-    console.log(err);
-  });
 });
 
 app.listen(3000, () => {
