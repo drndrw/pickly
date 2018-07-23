@@ -27,8 +27,6 @@ function verifyToken(req, res, next) {
 }
 
 app.get('/', verifyToken, (req, res) => {
-  // console.log(process.hrtime());
-  // console.log(new Date().getTime());
   res.json({'Register': '/user'});
 });
 
@@ -42,12 +40,6 @@ app.get('/user', verifyToken, (req,res) => {
   models.User.findAll({
     attributes: ['userId', 'username'],
   }).then(user => res.json(user));
-});
-
-// view users
-app.get('/sample', verifyToken, (req,res,next) => {
-  console.log(req.user.user)
-  res.json({'test': 'route'});
 });
 
 // register user
