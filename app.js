@@ -67,9 +67,7 @@ app.post('/user/auth', jsonParser, (req, res) => {
     bcrypt.compare(req.body.password, user.password, function(err, result) {
       if (result) {
         const currentTime = new Date().getTime();
-        var token = jwt.sign({user: user.userId, permission: user.permission}, process.env.JWT_TOKEN, {expiresIn: '1m'});
-        console.log(currentTime);
-        console.log(currentTime + parseInt(process.env.JWT_EXPIRES));
+        var token = jwt.sign({user: user.userId, permission: user.permission}, process.env.JWT_TOKEN, {expiresIn: process.env.JWT_EXPIRES});
         res.json({'authToken': token});
       } else {
         res.json({error: 'Invalid token'});
