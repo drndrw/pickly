@@ -11,14 +11,19 @@ var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
 function verifyToken(req, res, next) {
-    jwt.verify(req.get('Authorization'), process.env.JWT_TOKEN, function(err, decoded) {
-      if (decoded) {
-        req.user = decoded;
-        next();
-      } else {
-        res.json({error: err.message});
-      }
-    });
+    const jwtToken = req.get('Authorization').split(process.env.JWT_PREFIX + ' ')[1]
+    if (jwtToken) {
+      jwt.verify(jwtToken, process.env.JWT_TOKEN, function(err, decoded) {
+        if (decoded) {
+          req.user = decoded;
+          next();
+        } else {
+          res.json({error: err.message});
+        }
+      });
+    } else {
+      res.json({error: 'Invalid jwt prefix'})
+    }
 }
 
 app.get('/', verifyToken, (req, res) => {
