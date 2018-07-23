@@ -16,6 +16,10 @@ const Choice = sequelize.define('choice', {
     choiceCreatorId: Sequelize.INTEGER,
     choiceName: Sequelize.STRING,
     choiceAddress: Sequelize.STRING,
+    choiceAddress: Sequelize.STRING,
+    choiceState: Sequelize.STRING,
+    choiceZip: Sequelize.STRING,
+    choicePricing: Sequelize.INTEGER,
     choiceGenre: Sequelize.STRING
 });
 
