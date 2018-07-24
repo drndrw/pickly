@@ -44,6 +44,8 @@ Genre.belongsTo(Category, {foreignKey: 'genreCategoryId'});
 module.exports = {
   User : User,
   Choice: Choice,
+  Category: Category,
+  Genre: Genre,
   dbSync : sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
