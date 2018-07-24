@@ -23,7 +23,14 @@ const Choice = sequelize.define('choice', {
     choiceGenre: Sequelize.STRING
 });
 
+const Category = sequelize.define('category', {
+  categoryId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
+  categoryCreatorId: Sequelize.INTEGER,
+  categoryName: Sequelize.STRING,
+});
+
 Choice.belongsTo(User, {foreignKey: 'choiceCreatorId'});
+Category.belongsTo(User, {foreignKey: 'categoryCreatorId'});
 
 module.exports = {
   User : User,
