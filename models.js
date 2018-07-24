@@ -29,8 +29,17 @@ const Category = sequelize.define('category', {
   categoryName: Sequelize.STRING,
 });
 
+const Genre = sequelize.define('genre', {
+  genreId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
+  genreCreatorId: Sequelize.INTEGER,
+  genreCategoryId: Sequelize.INTEGER,
+  genreName: Sequelize.STRING,
+});
+
 Choice.belongsTo(User, {foreignKey: 'choiceCreatorId'});
 Category.belongsTo(User, {foreignKey: 'categoryCreatorId'});
+Genre.belongsTo(User, {foreignKey: 'genreCreatorId'});
+Genre.belongsTo(Category, {foreignKey: 'genreCategoryId'});
 
 module.exports = {
   User : User,
