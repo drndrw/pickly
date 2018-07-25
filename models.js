@@ -13,7 +13,7 @@ const User = sequelize.define('user', {
 
 const Choice = sequelize.define('choice', {
     choiceId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-    choiceCreatorId: Sequelize.INTEGER,
+    choiceCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
     choiceName: Sequelize.STRING,
     choiceAddress: Sequelize.STRING,
     choiceAddress: Sequelize.STRING,
@@ -25,21 +25,16 @@ const Choice = sequelize.define('choice', {
 
 const Category = sequelize.define('category', {
   categoryId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  categoryCreatorId: Sequelize.INTEGER,
+  categoryCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
   categoryName: Sequelize.STRING,
 });
 
 const Genre = sequelize.define('genre', {
   genreId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  genreCreatorId: Sequelize.INTEGER,
-  genreCategoryId: Sequelize.INTEGER,
+  genreCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
+  genreCategoryId: {type: Sequelize.INTEGER, references: {model: 'categories', key: 'categoryId'}},
   genreName: Sequelize.STRING,
 });
-
-Choice.belongsTo(User, {foreignKey: 'choiceCreatorId'});
-Category.belongsTo(User, {foreignKey: 'categoryCreatorId'});
-Genre.belongsTo(User, {foreignKey: 'genreCreatorId'});
-Genre.belongsTo(Category, {foreignKey: 'genreCategoryId'});
 
 module.exports = {
   User : User,
