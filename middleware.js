@@ -1,3 +1,8 @@
+var express = require('express');
+var app = express();
+require('dotenv').config();
+var jwt = require('jsonwebtoken');
+
 const verifyToken = (req, res, next) => {
     const jwtToken = req.get('Authorization').split(process.env.JWT_PREFIX + ' ')[1]
     if (jwtToken) {
@@ -13,3 +18,7 @@ const verifyToken = (req, res, next) => {
       res.json({error: 'Invalid jwt prefix'})
     }
 };
+
+module.exports = {
+  verifyToken: verifyToken
+}

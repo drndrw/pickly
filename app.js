@@ -5,13 +5,13 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var models = require('./models.js');
 var jwt = require('jsonwebtoken');
-var verifyToken = require('./middleware.js')
+var middleware = require('./middleware.js')
 
 // bcrypt config
 var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
-app.get('/', verifyToken, (req, res) => {
+app.get('/', middleware.verifyToken, (req, res) => {
   res.json({'Register': '/user'});
 });
 
@@ -21,14 +21,14 @@ app.post('/add', jsonParser, (req, res) => {
 });
 
 // view users
-app.get('/user', verifyToken, (req,res) => {
+app.get('/user', middleware.verifyToken, (req,res) => {
   models.User.findAll({
     attributes: ['userId', 'username'],
   }).then(user => res.json(user));
 });
 
 // register user
-app.post('/user', jsonParser, (req, res) => {
+app.post('/user', middleware.verifyToken, (req, res) => {
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     models.User.create({
       userName: req.body.userName,
