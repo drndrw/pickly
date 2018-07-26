@@ -5,26 +5,11 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var models = require('./models.js');
 var jwt = require('jsonwebtoken');
+var verifyToken = require('./middleware.js')
 
 // bcrypt config
 var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
-
-function verifyToken(req, res, next) {
-    const jwtToken = req.get('Authorization').split(process.env.JWT_PREFIX + ' ')[1]
-    if (jwtToken) {
-      jwt.verify(jwtToken, process.env.JWT_TOKEN, function(err, decoded) {
-        if (decoded) {
-          req.user = decoded;
-          next();
-        } else {
-          res.json({error: err.message});
-        }
-      });
-    } else {
-      res.json({error: 'Invalid jwt prefix'})
-    }
-}
 
 app.get('/', verifyToken, (req, res) => {
   res.json({'Register': '/user'});
