@@ -8,3 +8,5 @@ router.get('/', middleware.verifyToken, (req, res) => {
     attributes: ['categoryId', 'categoryName'],
   }).then(categories => res.json(categories));
 });
+
+module.exports = router;
