@@ -6,6 +6,7 @@ var jsonParser = bodyParser.json();
 var models = require('./models.js');
 var jwt = require('jsonwebtoken');
 var middleware = require('./middleware.js')
+var category = require('./categories.js')
 
 // bcrypt config
 var bcrypt = require('bcrypt');
@@ -20,6 +21,9 @@ app.post('/add', jsonParser, (req, res) => {
   res.json({'route': 'add'});
 });
 
+// import routes
+app.use('/category', category)
+
 // view users
 app.get('/user', middleware.verifyToken, (req,res) => {
   models.User.findAll({
@@ -28,7 +32,7 @@ app.get('/user', middleware.verifyToken, (req,res) => {
 });
 
 // register user
-app.post('/user', middleware.verifyToken, (req, res) => {
+app.post('/user', jsonParser, (req, res) => {
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     models.User.create({
       userName: req.body.userName,
