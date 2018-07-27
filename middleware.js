@@ -4,6 +4,7 @@ require('dotenv').config();
 var jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
+  if (req.get('Authorization')) {
     const jwtToken = req.get('Authorization').split(process.env.JWT_PREFIX + ' ')[1]
     if (jwtToken) {
       jwt.verify(jwtToken, process.env.JWT_TOKEN, function(err, decoded) {
@@ -17,6 +18,9 @@ const verifyToken = (req, res, next) => {
     } else {
       res.json({error: 'Invalid jwt prefix'})
     }
+  } else {
+    res.json({error: 'Missing Authorization header'})
+  }
 };
 
 module.exports = {
