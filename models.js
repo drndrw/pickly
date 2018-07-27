@@ -26,7 +26,7 @@ const Choice = sequelize.define('choice', {
 const Category = sequelize.define('category', {
   categoryId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
   categoryCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
-  categoryName: Sequelize.STRING,
+  categoryName: {type: Sequelize.STRING, unique: true},
 });
 
 const Genre = sequelize.define('genre', {
