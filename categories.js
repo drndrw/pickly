@@ -20,4 +20,9 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
   }).then(categories => res.json({status: 'Created', categoryId: categories.get().categoryId}).end(), user => res.json({status: 'Error', error: 'Category name already exists'}));
 });
 
+// view individual category
+router.get('/:categoryId', middleware.verifyToken, jsonParser, (req, res) => {
+  res.json({'categoryId': req.params.categoryId})
+});
+
 module.exports = router;
