@@ -33,7 +33,7 @@ const Genre = sequelize.define('genre', {
   genreId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
   genreCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
   genreCategoryId: {type: Sequelize.INTEGER, references: {model: 'categories', key: 'categoryId'}},
-  genreName: Sequelize.STRING,
+  genreName: {type: Sequelize.STRING, unique: true},
 });
 
 module.exports = {
