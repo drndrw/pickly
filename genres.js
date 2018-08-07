@@ -15,7 +15,7 @@ router.get('/', middleware.verifyToken, (req, res) => {
 // create a genre
 router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
   models.Category.findOne({
-    where: {categoryName: req.body.parentCategory}
+    where: {categoryId: req.body.parentCategoryId}
   })
     .then(parentCategory =>
       models.Genre.create({
