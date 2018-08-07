@@ -5,6 +5,9 @@ var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
+models.Genre.belongsTo(models.Category, {foreignKey: 'genreCategoryId', sourceKey: 'categoryId'});
+models.Category.hasMany(models.Genre, {targetKey: 'categoryId', foreignKey: 'genreCategoryId'});
+
 // show all categories
 router.get('/', middleware.verifyToken, (req, res) => {
   models.Category.findAll({
@@ -23,25 +26,41 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 // view individual category
 router.get('/:categoryId', middleware.verifyToken, jsonParser, (req, res) => {
   // res.json({'categoryId': req.params.categoryId})
-  models.Category.findOne({
+  // models.Category.findOne({
+  //   where: {categoryId: req.params.categoryId}
+  // })
+  // .then(category =>
+  //   models.Genre.findAll({
+  //     attributes: ['genreId', 'genreName'],
+  //     where: {genreCategoryId: category.categoryId}
+  //   })
+  //   .then(genres =>
+  //     res.json({
+  //       categoryId: category.categoryId,
+  //       categoryName: category.categoryName,
+  //       affiliatedGenres: genres
+  //     })
+  //   )
+  // )
+  // .catch(category =>
+  //   res.json({status: 'Error', error: 'Invalid category ID'})
+  // )
+  models.Category.findAll({
+    attributes: ['categoryId', 'categoryName'],
+    include: [{
+      model: models.Genre,
+      attributes: ['genreId', 'genreName']
+    }],
     where: {categoryId: req.params.categoryId}
+  }).then((categories) => {
+    console.log(categories.length)
+    if (categories.length === 0) {
+      res.status(404);
+      res.json({status: 'Error', error: 'Invalid category ID'});
+    } else {
+      res.json(categories);
+    }
   })
-  .then(category =>
-    models.Genre.findAll({
-      attributes: ['genreId', 'genreName'],
-      where: {genreCategoryId: category.categoryId}
-    })
-    .then(genres =>
-      res.json({
-        categoryId: category.categoryId,
-        categoryName: category.categoryName,
-        affiliatedGenres: genres
-      })
-    )
-  )
-  .catch(category =>
-    res.json({status: 'Error', error: 'Invalid category ID'})
-  )
 });
 
 module.exports = router;
