@@ -16,7 +16,6 @@ const Choice = sequelize.define('choice', {
     choiceCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
     choiceName: Sequelize.STRING,
     choiceAddress: Sequelize.STRING,
-    choiceAddress: Sequelize.STRING,
     choiceState: Sequelize.STRING,
     choiceZip: Sequelize.STRING,
     choicePricing: Sequelize.INTEGER,
