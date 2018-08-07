@@ -25,26 +25,6 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 
 // view individual category
 router.get('/:categoryId', middleware.verifyToken, jsonParser, (req, res) => {
-  // res.json({'categoryId': req.params.categoryId})
-  // models.Category.findOne({
-  //   where: {categoryId: req.params.categoryId}
-  // })
-  // .then(category =>
-  //   models.Genre.findAll({
-  //     attributes: ['genreId', 'genreName'],
-  //     where: {genreCategoryId: category.categoryId}
-  //   })
-  //   .then(genres =>
-  //     res.json({
-  //       categoryId: category.categoryId,
-  //       categoryName: category.categoryName,
-  //       affiliatedGenres: genres
-  //     })
-  //   )
-  // )
-  // .catch(category =>
-  //   res.json({status: 'Error', error: 'Invalid category ID'})
-  // )
   models.Category.findAll({
     attributes: ['categoryId', 'categoryName'],
     include: [{
