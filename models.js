@@ -18,7 +18,7 @@ const Choice = sequelize.define('choice', {
     choiceAddress: Sequelize.STRING,
     choiceCity: Sequelize.STRING,
     choiceState: Sequelize.STRING,
-    choiceZip: Sequelize.STRING,
+    choiceZip: Sequelize.INTEGER,
     choicePricing: Sequelize.INTEGER,
     choiceGenreId: {type: Sequelize.INTEGER, references: {model: 'genres', key: 'genreId'}}
 });
