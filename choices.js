@@ -48,4 +48,9 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
   .catch(choice => res.json({status: 'Error', error: 'Choice name invalid or not specified'}))
 });
 
+// edit a choice
+router.put('/:choiceId', middleware.verifyToken, jsonParser, (req, res) => {
+  res.json({'choiceId': req.params.choiceId})
+});
+
 module.exports = router;
