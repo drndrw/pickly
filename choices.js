@@ -12,6 +12,27 @@ router.get('/', middleware.verifyToken, (req, res) => {
   }).then(genres => res.json(genres));
 });
 
+// view individual choice
+router.get('/:choiceId', middleware.verifyToken, jsonParser, (req, res) => {
+  models.Choice.findOne({
+    attributes: ['choiceId', 'choiceName', 'choiceAddress', 'choiceCity', 'choiceState', 'choiceZip', 'choicePricing', 'choiceGenreId'],
+    where: {choiceId: req.params.choiceId}
+  }).then((choice) => {
+    res.json({
+      choiceId: choice.choiceId,
+      choiceName: choice.choiceName,
+      choiceLocation: {
+        choiceAddress: choice.choiceAddress,
+        choiceCity: choice.choiceCity,
+        choiceState: choice.choiceState,
+        choiceZip: choice.choiceZip
+      },
+      choicePricing: choice.choicePricing,
+      choiceGenreId: choice.choiceGenreId
+    })
+  })
+});
+
 // create a choice
 router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
   models.Choice.create({
