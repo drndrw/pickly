@@ -10,12 +10,12 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
   models.Choice.create({
     choiceCreatorId: req.user.user,
     choiceName: req.body.choiceName,
-    choicePricing: req.choice.choicePricing,
+    choicePricing: req.body.choicePricing,
     choiceAddress: req.body.choiceLocation.choiceAddress,
     choiceCity: req.body.choiceLocation.choiceCity,
     choiceState: req.body.choiceLocation.choiceState,
     choiceZip: req.body.choiceLocation.choiceZip,
-    choiceGenre: req.body.choiceLocation.choiceGenreId,
+    choiceGenreId: req.body.choiceGenreId,
   }).then(choice => res.json({status: 'Created', choiceId: choice.get().choiceId}).end(), choice => res.json({status: 'Error', error: 'Choice already exists'}))
   .catch(choice => res.json({status: 'Error', error: 'Choice name invalid or not specified'}))
 });
