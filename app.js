@@ -68,8 +68,8 @@ app.post('/user/auth', jsonParser, (req, res) => {
 
 app.listen(3000, () => {
   models.User.sync();
-  models.Choice.sync();
   models.Category.sync();
   models.Genre.sync();
+  models.Choice.sync();
   console.log('listening');
 })
