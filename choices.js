@@ -5,6 +5,13 @@ var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
+// show all choices
+router.get('/', middleware.verifyToken, (req, res) => {
+  models.Choice.findAll({
+    attributes: ['choiceId', 'choiceName', 'choiceGenreId'],
+  }).then(genres => res.json(genres));
+});
+
 // create a choice
 router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
   models.Choice.create({
