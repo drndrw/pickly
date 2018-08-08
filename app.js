@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 var middleware = require('./middleware.js')
 var category = require('./categories.js')
 var genre = require('./genres.js')
+var choice = require('./choices.js')
 
 // bcrypt config
 var bcrypt = require('bcrypt');
@@ -25,6 +26,7 @@ app.post('/add', jsonParser, (req, res) => {
 // import routes
 app.use('/category', category)
 app.use('/genre', genre)
+app.use('/choice', choice)
 
 // view users
 app.get('/user', middleware.verifyToken, (req,res) => {
