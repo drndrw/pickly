@@ -20,7 +20,7 @@ const Choice = sequelize.define('choice', {
     choiceState: Sequelize.STRING,
     choiceZip: Sequelize.STRING,
     choicePricing: Sequelize.INTEGER,
-    choiceGenre: Sequelize.STRING
+    choiceGenreId: {type: Sequelize.INTEGER, references: {model: 'genres', key: 'genreId'}}
 });
 
 const Category = sequelize.define('category', {
