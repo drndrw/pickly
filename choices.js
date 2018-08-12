@@ -50,7 +50,15 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 
 // edit a choice
 router.put('/:choiceId', middleware.verifyToken, jsonParser, (req, res) => {
-  res.json({'choiceId': req.params.choiceId})
+  // append to dictionary if object is undefined, otherwise keep iterating over potential update paramters
+  console.log(req.body)
+  testUpdates = {choiceName: req.body.choiceName}
+  models.Choice.update(req.body, {
+    where: {choiceId: req.params.choiceId}
+  }).then(choice => res.json({status: 'Updated'}))
+  .catch(choice =>
+    res.json({status: 'Error', error: 'Invalid choice ID'})
+  )
 });
 
 module.exports = router;
