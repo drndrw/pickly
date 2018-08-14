@@ -38,7 +38,21 @@ const checkCategory = (req, res, next) => {
   )
 }
 
+const checkGenre = (req, res, next) => {
+  models.Genre.findOne({
+    where: {genreId: req.params.genreId}
+  }).then((genre) =>
+  {  if (genre) {
+      next();
+    } else {
+      res.status(404);
+      res.json({status: 'Error', error: 'Invalid genre ID'});
+    }}
+  )
+}
+
 module.exports = {
   verifyToken: verifyToken,
-  checkCategory: checkCategory
+  checkCategory: checkCategory,
+  checkGenre: checkGenre
 }
