@@ -64,9 +64,23 @@ const checkChoice = (req, res, next) => {
   )
 }
 
+const checkUser = (req, res, next) => {
+  models.User.findOne({
+    where: {userId: req.params.userId}
+  }).then((user) =>
+  {  if (user) {
+      next();
+    } else {
+      res.status(404);
+      res.json({status: 'Error', error: 'Invalid user ID'});
+    }}
+  )
+}
+
 module.exports = {
   verifyToken: verifyToken,
   checkCategory: checkCategory,
   checkGenre: checkGenre,
-  checkChoice: checkChoice
+  checkChoice: checkChoice,
+  checkUser: checkUser
 }
