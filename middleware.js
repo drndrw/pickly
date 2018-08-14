@@ -29,12 +29,12 @@ const checkCategory = (req, res, next) => {
   models.Category.findOne({
     where: {categoryId: req.params.categoryId}
   }).then((category) =>
-    if (category) {
+  {  if (category) {
       next();
     } else {
       res.status(404);
       res.json({status: 'Error', error: 'Invalid category ID'});
-    }
+    }}
   )
 }
 
