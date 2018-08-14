@@ -51,8 +51,22 @@ const checkGenre = (req, res, next) => {
   )
 }
 
+const checkChoice = (req, res, next) => {
+  models.Choice.findOne({
+    where: {choiceId: req.params.choiceId}
+  }).then((choice) =>
+  {  if (choice) {
+      next();
+    } else {
+      res.status(404);
+      res.json({status: 'Error', error: 'Invalid choice ID'});
+    }}
+  )
+}
+
 module.exports = {
   verifyToken: verifyToken,
   checkCategory: checkCategory,
-  checkGenre: checkGenre
+  checkGenre: checkGenre,
+  checkChoice: checkChoice
 }
