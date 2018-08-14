@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 require('dotenv').config();
+var models = require('./models.js');
 var jwt = require('jsonwebtoken');
 
 const verifyToken = (req, res, next) => {
@@ -23,6 +24,21 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// check existance of categories, genres and choices
+const checkCategory = (req, res, next) => {
+  models.Category.findOne({
+    where: {categoryId: req.params.categoryId}
+  }).then((category) =>
+    if (category) {
+      next();
+    } else {
+      res.status(404);
+      res.json({status: 'Error', error: 'Invalid category ID'});
+    }
+  )
+}
+
 module.exports = {
-  verifyToken: verifyToken
+  verifyToken: verifyToken,
+  checkCategory: checkCategory
 }
