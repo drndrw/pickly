@@ -25,7 +25,7 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 
 // view individual category
 router.get('/:categoryId', middleware.verifyToken, jsonParser, (req, res) => {
-  models.Category.findAll({
+  models.Category.findOne({
     attributes: ['categoryId', 'categoryName'],
     include: [{
       model: models.Genre,
@@ -33,13 +33,7 @@ router.get('/:categoryId', middleware.verifyToken, jsonParser, (req, res) => {
     }],
     where: {categoryId: req.params.categoryId}
   }).then((categories) => {
-    console.log(categories.length)
-    if (categories.length === 0) {
-      res.status(404);
-      res.json({status: 'Error', error: 'Invalid category ID'});
-    } else {
       res.json(categories);
-    }
   })
 });
 
