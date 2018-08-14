@@ -24,7 +24,7 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 });
 
 // view individual category
-router.get('/:categoryId', middleware.verifyToken, jsonParser, (req, res) => {
+router.get('/:categoryId', middleware.verifyToken, middleware.checkCategory, jsonParser, (req, res) => {
   models.Category.findOne({
     attributes: ['categoryId', 'categoryName'],
     include: [{
