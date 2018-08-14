@@ -30,8 +30,8 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 });
 
 // view individual genre
-router.get('/:genreId', middleware.verifyToken, jsonParser, (req, res) => {
-  models.Genre.findAll({
+router.get('/:genreId', middleware.verifyToken, middleware.checkGenre, jsonParser, (req, res) => {
+  models.Genre.findOne({
     attributes: ['genreId', 'genreName', 'genreCategoryId'],
     include: [{
       model: models.Choice,
@@ -39,13 +39,7 @@ router.get('/:genreId', middleware.verifyToken, jsonParser, (req, res) => {
     }],
     where: {genreId: req.params.genreId}
   }).then((genre) => {
-    console.log(genre.length)
-    if (genre.length === 0) {
-      res.status(404);
-      res.json({status: 'Error', error: 'Invalid genre ID'});
-    } else {
       res.json(genre);
-    }
   })
 });
 

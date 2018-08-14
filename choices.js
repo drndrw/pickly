@@ -13,13 +13,12 @@ router.get('/', middleware.verifyToken, (req, res) => {
 });
 
 // view individual choice
-router.get('/:choiceId', middleware.verifyToken, jsonParser, (req, res) => {
+router.get('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonParser, (req, res) => {
   models.Choice.findOne({
     attributes: ['choiceId', 'choiceName', 'choiceAddress', 'choiceCity', 'choiceState', 'choiceZip', 'choicePricing', 'choiceGenreId'],
     where: {choiceId: req.params.choiceId}
   }).then((choice) => {
-    if (choice)
-    {res.json({
+    res.json({
       choiceId: choice.choiceId,
       choiceName: choice.choiceName,
       choiceLocation: {
@@ -30,10 +29,7 @@ router.get('/:choiceId', middleware.verifyToken, jsonParser, (req, res) => {
       },
       choicePricing: choice.choicePricing,
       choiceGenreId: choice.choiceGenreId
-    })} else {
-      res.status(404);
-      res.json({status: 'Error', error: 'Invalid choice ID'})
-    }
+    })
   })
 });
 
@@ -53,15 +49,12 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 });
 
 // edit a choice
-router.put('/:choiceId', middleware.verifyToken, jsonParser, (req, res) => {
+router.put('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonParser, (req, res) => {
   // append to dictionary if object is undefined, otherwise keep iterating over potential update paramters
   testUpdates = {choiceName: req.body.choiceName}
   models.Choice.update(req.body, {
     where: {choiceId: req.params.choiceId}
   }).then(choice => res.json({status: 'Updated'}))
-  .catch(choice =>
-    res.json({status: 'Error', error: 'Invalid choice ID'})
-  )
 });
 
 module.exports = router;
