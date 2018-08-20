@@ -29,6 +29,14 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
     .catch(parentCategory => res.json({status: 'Error', error: 'Category name invalid or not specified'}))
 });
 
+// edit a genre
+router.put('/:genreId', middleware.verifyToken, middleware.checkGenre, jsonParser, (req, res) => {
+  models.Genre.update(req.body, {
+    where: {genreId: req.params.genreId}
+  }).then(genre => res.json({status: 'Updated'}))
+  .catch(error => res.json({status: 'Error', error: error}))
+});
+
 // view individual genre
 router.get('/:genreId', middleware.verifyToken, middleware.checkGenre, jsonParser, (req, res) => {
   models.Genre.findOne({
