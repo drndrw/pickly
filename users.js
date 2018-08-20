@@ -12,7 +12,7 @@ var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
 // view users
-router.get('/', middleware.verifyToken, (req,res) => {
+router.get('/', middleware.verifyToken, (req, res) => {
   models.User.findAll({
     attributes: ['userId', 'username'],
   }).then(user => res.json(user));
@@ -28,7 +28,14 @@ router.post('/', jsonParser, (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       permission: 0
-    }).then(user => res.json({'status': 'Created', 'userId': user.get().userId, 'username': user.get().userName}).end(), user => res.json({'status': 'Error', 'error': 'Username or email already exists.'}));
+    }).then(user => res.json({
+      'status': 'Created',
+      'userId': user.get().userId,
+      'username': user.get().userName
+    }).end(), user => res.json({
+      'status': 'Error',
+      'error': 'Username or email already exists.'
+    }));
   });
 });
 
@@ -36,9 +43,11 @@ router.post('/', jsonParser, (req, res) => {
 router.get('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser, (req, res) => {
   models.User.findOne({
     attributes: ['userId', 'userName', 'firstName', 'lastName', 'email'],
-    where: {userId: req.params.userId}
+    where: {
+      userId: req.params.userId
+    }
   }).then((user) => {
-      res.json(user);
+    res.json(user);
   })
 });
 
@@ -47,42 +56,68 @@ router.put('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser,
   const userParams = ['userName', 'password', 'firstName', 'lastName', 'email'];
   let insertParams = {};
   for (param of userParams) {
-      if (req.body.hasOwnProperty(param)) {
-        insertParams[param] = req.body[param];
-      }
+    if (req.body.hasOwnProperty(param)) {
+      insertParams[param] = req.body[param];
+    }
   }
   if (insertParams.hasOwnProperty('password')) {
     bcrypt.hash(insertParams.password, saltRounds, (err, hash) => {
       insertParams.password = hash;
       models.User.update(insertParams, {
-        where: {userId: req.params.userId}
-      }).then(user => res.json({status: 'Updated'}))
-      .catch(error => res.json({status: 'Error', error: error})
-    )
-  }) } else {
+          where: {
+            userId: req.params.userId
+          }
+        }).then(user => res.json({
+          status: 'Updated'
+        }))
+        .catch(error => res.json({
+          status: 'Error',
+          error: error
+        }))
+    })
+  } else {
     models.User.update(insertParams, {
-      where: {userId: req.params.userId}
-    }).then(user => res.json({status: 'Updated'}))
-    .catch(error => res.json({status: 'Error', error: error})
-  )
+        where: {
+          userId: req.params.userId
+        }
+      }).then(user => res.json({
+        status: 'Updated'
+      }))
+      .catch(error => res.json({
+        status: 'Error',
+        error: error
+      }))
   }
 });
 
 // authenticate user
 router.post('/auth', jsonParser, (req, res) => {
   models.User.findOne({
-    where: {userName: req.body.userName}
+    where: {
+      userName: req.body.userName
+    }
   }).then(user =>
     bcrypt.compare(req.body.password, user.password, function(err, result) {
       if (result) {
         const currentTime = new Date().getTime();
-        var token = jwt.sign({user: user.userId, permission: user.permission}, process.env.JWT_TOKEN, {expiresIn: process.env.JWT_EXPIRES});
-        res.json({'authToken': token});
+        var token = jwt.sign({
+          user: user.userId,
+          permission: user.permission
+        }, process.env.JWT_TOKEN, {
+          expiresIn: process.env.JWT_EXPIRES
+        });
+        res.json({
+          'authToken': token
+        });
       } else {
-        res.json({error: 'Invalid token'});
+        res.json({
+          error: 'Invalid token'
+        });
       }
     })
-  ).catch(user => res.json({error: 'Invalid username'}));
+  ).catch(user => res.json({
+    error: 'Invalid username'
+  }));
 });
 
 module.exports = router;
