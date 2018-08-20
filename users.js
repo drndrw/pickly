@@ -32,6 +32,16 @@ router.post('/', jsonParser, (req, res) => {
   });
 });
 
+// view individual user
+router.get('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser, (req, res) => {
+  models.User.findOne({
+    attributes: ['userId', 'userName', 'firstName', 'lastName', 'email'],
+    where: {userId: req.params.userId}
+  }).then((user) => {
+      res.json(user);
+  })
+});
+
 // authenticate user
 router.post('/auth', jsonParser, (req, res) => {
   models.User.findOne({
