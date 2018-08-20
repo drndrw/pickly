@@ -50,7 +50,6 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 
 // edit a choice
 router.put('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonParser, (req, res) => {
-  // append to dictionary if object is undefined, otherwise keep iterating over potential update paramters
   testUpdates = {choiceName: req.body.choiceName}
   models.Choice.update(req.body, {
     where: {choiceId: req.params.choiceId}
