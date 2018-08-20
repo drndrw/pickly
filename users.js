@@ -42,6 +42,32 @@ router.get('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser,
   })
 });
 
+// edit a user
+router.put('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser, (req, res) => {
+  const userParams = ['userName', 'password', 'firstName', 'lastName', 'email'];
+  let insertParams = {};
+  for (param of userParams) {
+      if (req.body.hasOwnProperty(param)) {
+        insertParams[param] = req.body[param];
+      }
+  }
+  if (insertParams.hasOwnProperty('password')) {
+    bcrypt.hash(insertParams.password, saltRounds, (err, hash) => {
+      insertParams.password = hash;
+      models.User.update(insertParams, {
+        where: {userId: req.params.userId}
+      }).then(user => res.json({status: 'Updated'}))
+      .catch(error => res.json({status: 'Error', error: error})
+    )
+  }) } else {
+    models.User.update(insertParams, {
+      where: {userId: req.params.userId}
+    }).then(user => res.json({status: 'Updated'}))
+    .catch(error => res.json({status: 'Error', error: error})
+  )
+  }
+});
+
 // authenticate user
 router.post('/auth', jsonParser, (req, res) => {
   models.User.findOne({
