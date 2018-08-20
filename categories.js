@@ -37,4 +37,12 @@ router.get('/:categoryId', middleware.verifyToken, middleware.checkCategory, jso
   })
 });
 
+// edit a categories
+router.put('/:categoryId', middleware.verifyToken, middleware.checkCategory, jsonParser, (req, res) => {
+  models.Category.update(req.body, {
+    where: {categoryId: req.params.categoryId}
+  }).then(category => res.json({status: 'Updated'}))
+  .catch(error => res.json({status: 'Error', error: error}))
+});
+
 module.exports = router;
