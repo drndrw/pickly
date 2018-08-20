@@ -55,6 +55,7 @@ router.put('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonPar
   models.Choice.update(req.body, {
     where: {choiceId: req.params.choiceId}
   }).then(choice => res.json({status: 'Updated'}))
+  .catch(error => res.json({status: 'Error', error: error}))
 });
 
 module.exports = router;
