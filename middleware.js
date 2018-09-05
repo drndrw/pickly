@@ -4,23 +4,31 @@ require('dotenv').config();
 var models = require('./models.js');
 var jwt = require('jsonwebtoken');
 
-const verifyToken = (req, res, next) => {
-  if (req.get('Authorization')) {
-    const jwtToken = req.get('Authorization').split(process.env.JWT_PREFIX + ' ')[1]
-    if (jwtToken) {
-      jwt.verify(jwtToken, process.env.JWT_TOKEN, function(err, decoded) {
-        if (decoded) {
-          req.user = decoded;
-          next();
-        } else {
-          res.json({error: err.message});
-        }
-      });
+const verifyToken = (permissions=null) => {
+  return (req, res, next) => {
+    if (req.get('Authorization')) {
+      const jwtToken = req.get('Authorization').split(process.env.JWT_PREFIX + ' ')[1]
+      if (jwtToken) {
+        jwt.verify(jwtToken, process.env.JWT_TOKEN, function(err, decoded) {
+          if (decoded) {
+            req.user = decoded;
+            if (permissions) {
+              if (permissions.includes(req.user.permission)) {
+                next();
+              } else {
+                res.status(403);
+                res.json({error: 'Insufficient permissions'});
+              }
+            }
+            next();
+          }
+        });
+      } else {
+        res.json({error: 'Invalid jwt prefix'})
+      }
     } else {
-      res.json({error: 'Invalid jwt prefix'})
+      res.json({error: 'Missing Authorization header'})
     }
-  } else {
-    res.json({error: 'Missing Authorization header'})
   }
 };
 
@@ -79,6 +87,7 @@ const checkUser = (req, res, next) => {
 
 module.exports = {
   verifyToken: verifyToken,
+  verifyPermissions: verifyPermissions,
   checkCategory: checkCategory,
   checkGenre: checkGenre,
   checkChoice: checkChoice,
