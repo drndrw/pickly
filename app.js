@@ -11,7 +11,7 @@ var genre = require('./genres.js')
 var choice = require('./choices.js')
 var user = require('./users.js')
 
-app.get('/', middleware.verifyToken, (req, res) => {
+app.get('/', middleware.verifyToken(), (req, res) => {
   res.json({'Register': '/user'});
 });
 

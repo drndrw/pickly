@@ -6,14 +6,14 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 // show all choices
-router.get('/', middleware.verifyToken, (req, res) => {
+router.get('/', middleware.verifyToken(), (req, res) => {
   models.Choice.findAll({
     attributes: ['choiceId', 'choiceName', 'choiceGenreId'],
   }).then(genres => res.json(genres));
 });
 
 // view individual choice
-router.get('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonParser, (req, res) => {
+router.get('/:choiceId', middleware.verifyToken(), middleware.checkChoice, jsonParser, (req, res) => {
   models.Choice.findOne({
     attributes: ['choiceId', 'choiceName', 'choiceAddress', 'choiceCity', 'choiceState', 'choiceZip', 'choicePricing', 'choiceGenreId'],
     where: {choiceId: req.params.choiceId}
@@ -34,7 +34,7 @@ router.get('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonPar
 });
 
 // create a choice
-router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
+router.post('/', middleware.verifyToken(), jsonParser, (req, res) => {
   models.Choice.create({
     choiceCreatorId: req.user.user,
     choiceName: req.body.choiceName,
@@ -49,7 +49,7 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 });
 
 // edit a choice
-router.put('/:choiceId', middleware.verifyToken, middleware.checkChoice, jsonParser, (req, res) => {
+router.put('/:choiceId', middleware.verifyToken(), middleware.checkChoice, jsonParser, (req, res) => {
   testUpdates = {choiceName: req.body.choiceName}
   models.Choice.update(req.body, {
     where: {choiceId: req.params.choiceId}

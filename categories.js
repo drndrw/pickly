@@ -9,14 +9,14 @@ models.Genre.belongsTo(models.Category, {foreignKey: 'genreCategoryId', sourceKe
 models.Category.hasMany(models.Genre, {targetKey: 'categoryId', foreignKey: 'genreCategoryId'});
 
 // show all categories
-router.get('/', middleware.verifyToken, (req, res) => {
+router.get('/', middleware.verifyToken(), (req, res) => {
   models.Category.findAll({
     attributes: ['categoryId', 'categoryName'],
   }).then(categories => res.json(categories));
 });
 
 // create category
-router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
+router.post('/', middleware.verifyToken(), jsonParser, (req, res) => {
   models.Category.create({
     categoryCreatorId: req.user.user,
     categoryName: req.body.categoryName,
@@ -24,7 +24,7 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 });
 
 // view individual category
-router.get('/:categoryId', middleware.verifyToken, middleware.checkCategory, jsonParser, (req, res) => {
+router.get('/:categoryId', middleware.verifyToken(), middleware.checkCategory, jsonParser, (req, res) => {
   models.Category.findOne({
     attributes: ['categoryId', 'categoryName'],
     include: [{
@@ -38,7 +38,7 @@ router.get('/:categoryId', middleware.verifyToken, middleware.checkCategory, jso
 });
 
 // edit a categories
-router.put('/:categoryId', middleware.verifyToken, middleware.checkCategory, jsonParser, (req, res) => {
+router.put('/:categoryId', middleware.verifyToken(), middleware.checkCategory, jsonParser, (req, res) => {
   models.Category.update(req.body, {
     where: {categoryId: req.params.categoryId}
   }).then(category => res.json({status: 'Updated'}))

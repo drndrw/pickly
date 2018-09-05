@@ -9,14 +9,14 @@ models.Choice.belongsTo(models.Genre, {foreignKey: 'choiceGenreId', sourceKey: '
 models.Genre.hasMany(models.Choice, {targetKey: 'choiceId', foreignKey: 'choiceGenreId'});
 
 // show all genres
-router.get('/', middleware.verifyToken, (req, res) => {
+router.get('/', middleware.verifyToken(), (req, res) => {
   models.Genre.findAll({
     attributes: ['genreId', 'genreName', 'genreCategoryId'],
   }).then(genres => res.json(genres));
 });
 
 // create a genre
-router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
+router.post('/', middleware.verifyToken(), jsonParser, (req, res) => {
   models.Category.findOne({
     where: {categoryId: req.body.parentCategoryId}
   })
@@ -30,7 +30,7 @@ router.post('/', middleware.verifyToken, jsonParser, (req, res) => {
 });
 
 // edit a genre
-router.put('/:genreId', middleware.verifyToken, middleware.checkGenre, jsonParser, (req, res) => {
+router.put('/:genreId', middleware.verifyToken(), middleware.checkGenre, jsonParser, (req, res) => {
   models.Genre.update(req.body, {
     where: {genreId: req.params.genreId}
   }).then(genre => res.json({status: 'Updated'}))
@@ -38,7 +38,7 @@ router.put('/:genreId', middleware.verifyToken, middleware.checkGenre, jsonParse
 });
 
 // view individual genre
-router.get('/:genreId', middleware.verifyToken, middleware.checkGenre, jsonParser, (req, res) => {
+router.get('/:genreId', middleware.verifyToken(), middleware.checkGenre, jsonParser, (req, res) => {
   models.Genre.findOne({
     attributes: ['genreId', 'genreName', 'genreCategoryId'],
     include: [{

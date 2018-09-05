@@ -12,7 +12,7 @@ var bcrypt = require('bcrypt');
 const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS)
 
 // view users
-router.get('/', middleware.verifyToken, (req, res) => {
+router.get('/', middleware.verifyToken(), (req, res) => {
   models.User.findAll({
     attributes: ['userId', 'username'],
   }).then(user => res.json(user));
@@ -40,7 +40,7 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 // view individual user
-router.get('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser, (req, res) => {
+router.get('/:userId', middleware.verifyToken(), middleware.checkUser, jsonParser, (req, res) => {
   models.User.findOne({
     attributes: ['userId', 'userName', 'firstName', 'lastName', 'email'],
     where: {
@@ -52,7 +52,7 @@ router.get('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser,
 });
 
 // edit a user
-router.put('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser, (req, res) => {
+router.put('/:userId', middleware.verifyToken(), middleware.checkUser, jsonParser, (req, res) => {
   const userParams = ['userName', 'password', 'firstName', 'lastName', 'email'];
   let insertParams = {};
   for (param of userParams) {
@@ -91,7 +91,7 @@ router.put('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser,
 });
 
 // delete user
-router.delete('/:userId', middleware.verifyToken, middleware.checkUser, (req, res) => {
+router.delete('/:userId', middleware.verifyToken()([2]), middleware.checkUser, (req, res) => {
   // models.User.destroy()
   res.json({testing: 'this'})
 });
