@@ -91,7 +91,7 @@ router.put('/:userId', middleware.verifyToken(), middleware.checkUser, jsonParse
 });
 
 // delete user
-router.delete('/:userId', middleware.verifyToken()([2]), middleware.checkUser, (req, res) => {
+router.delete('/:userId', middleware.verifyToken(), middleware.checkUser, (req, res) => {
   // models.User.destroy()
   res.json({testing: 'this'})
 });
