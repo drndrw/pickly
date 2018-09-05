@@ -18,16 +18,18 @@ const verifyToken = (permissions=null) => {
               } else {
                 res.status(403);
                 res.json({error: 'Insufficient permissions'});
+                res.end();
               }
+            } else {
+              next();
             }
-            next();
           }
         });
       } else {
-        res.json({error: 'Invalid jwt prefix'})
+        res.json({error: 'Invalid jwt prefix'});
       }
     } else {
-      res.json({error: 'Missing Authorization header'})
+      res.json({error: 'Missing Authorization header'});
     }
   }
 };
@@ -87,7 +89,6 @@ const checkUser = (req, res, next) => {
 
 module.exports = {
   verifyToken: verifyToken,
-  verifyPermissions: verifyPermissions,
   checkCategory: checkCategory,
   checkGenre: checkGenre,
   checkChoice: checkChoice,
