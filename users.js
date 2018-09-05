@@ -5,6 +5,7 @@ var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var jwt = require('jsonwebtoken');
+var config = require('./config.js');
 require('dotenv').config();
 
 // bcrypt config
@@ -88,12 +89,6 @@ router.put('/:userId', middleware.verifyToken(), middleware.checkUser, jsonParse
         error: error
       }))
   }
-});
-
-// delete user
-router.delete('/:userId', middleware.verifyToken(), middleware.checkUser, (req, res) => {
-  // models.User.destroy()
-  res.json({testing: 'this'})
 });
 
 // authenticate user
