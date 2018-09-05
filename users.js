@@ -90,6 +90,12 @@ router.put('/:userId', middleware.verifyToken, middleware.checkUser, jsonParser,
   }
 });
 
+// delete user
+router.delete('/:userId', middleware.verifyToken, middleware.checkUser, (req, res) => {
+  // models.User.destroy()
+  res.json({testing: 'this'})
+});
+
 // authenticate user
 router.post('/auth', jsonParser, (req, res) => {
   models.User.findOne({
