@@ -13,7 +13,7 @@ const User = sequelize.define('user', {
 
 const Choice = sequelize.define('choice', {
     choiceId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-    choiceCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
+    choiceCreatorId: Sequelize.INTEGER,
     choiceName: Sequelize.STRING,
     choiceAddress: Sequelize.STRING,
     choiceCity: Sequelize.STRING,
@@ -35,6 +35,9 @@ const Genre = sequelize.define('genre', {
   genreCategoryId: {type: Sequelize.INTEGER, references: {model: 'categories', key: 'categoryId'}},
   genreName: {type: Sequelize.STRING, unique: true},
 });
+
+User.hasMany(Choice, {foreignKey: 'choiceCreatorId', sourceKey: 'userId'});
+Choice.belongsTo(User, {foreignKey: 'choiceCreatorId', targetKey: 'userId'});
 
 module.exports = {
   User : User,
