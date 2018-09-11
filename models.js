@@ -13,14 +13,14 @@ const User = sequelize.define('user', {
 
 const Choice = sequelize.define('choice', {
     choiceId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-    choiceCreatorId: Sequelize.INTEGER,
+    choiceCreatorId: {type: Sequelize.INTEGER, allowNull: false},
     choiceName: Sequelize.STRING,
     choiceAddress: Sequelize.STRING,
     choiceCity: Sequelize.STRING,
     choiceState: Sequelize.STRING,
     choiceZip: Sequelize.INTEGER,
     choicePricing: Sequelize.INTEGER,
-    choiceGenreId: Sequelize.INTEGER
+    choiceGenreId: {type: Sequelize.INTEGER, allowNull: false}
 });
 
 const Category = sequelize.define('category', {
@@ -31,8 +31,8 @@ const Category = sequelize.define('category', {
 
 const Genre = sequelize.define('genre', {
   genreId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  genreCreatorId: Sequelize.INTEGER,
-  genreCategoryId: Sequelize.INTEGER,
+  genreCreatorId: {type: Sequelize.INTEGER, allowNull: false},
+  genreCategoryId: {type: Sequelize.INTEGER, allowNull: false},
   genreName: {type: Sequelize.STRING, unique: true},
 });
 
@@ -48,7 +48,7 @@ Genre.hasMany(Choice, {foreignKey: 'choiceGenreId', sourceKey: 'genreId'});
 Choice.belongsTo(Genre, {foreignKey: 'choiceGenreId', targetKey: 'genreId'});
 
 module.exports = {
-  User : User,
+  User: User,
   Category: Category,
   Genre: Genre,
   Choice: Choice,
