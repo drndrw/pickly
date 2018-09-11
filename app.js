@@ -27,9 +27,5 @@ app.use('/choice', choice)
 app.use('/user', user)
 
 app.listen(3000, () => {
-  models.User.sync();
-  models.Category.sync();
-  models.Genre.sync();
-  models.Choice.sync();
-  console.log('listening');
+  models.sequelize.sync()
 })

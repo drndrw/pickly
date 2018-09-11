@@ -25,7 +25,7 @@ const Choice = sequelize.define('choice', {
 
 const Category = sequelize.define('category', {
   categoryId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  categoryCreatorId: Sequelize.INTEGER,
+  categoryCreatorId: {type: Sequelize.INTEGER, allowNull: false},
   categoryName: {type: Sequelize.STRING, unique: true},
 });
 
@@ -52,11 +52,5 @@ module.exports = {
   Category: Category,
   Genre: Genre,
   Choice: Choice,
-  dbSync : sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  })
+  sequelize: sequelize
 }
