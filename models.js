@@ -32,24 +32,26 @@ const Category = sequelize.define('category', {
 const Genre = sequelize.define('genre', {
   genreId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
   genreCreatorId: Sequelize.INTEGER,
-  genreCategoryId: {type: Sequelize.INTEGER, references: {model: 'categories', key: 'categoryId'}},
+  genreCategoryId: Sequelize.INTEGER,
   genreName: {type: Sequelize.STRING, unique: true},
 });
 
-User.hasMany(Choice, {foreignKey: 'choiceCreatorId', sourceKey: 'userId'});
-Choice.belongsTo(User, {foreignKey: 'choiceCreatorId', targetKey: 'userId'});
-Genre.hasMany(Choice, {foreignKey: 'choiceGenreId', sourceKey: 'genreId'});
-Choice.belongsTo(Genre, {foreignKey: 'choiceGenreId', targetKey: 'genreId'});
 User.hasMany(Category, {foreignKey: 'categoryCreatorId', sourceKey: 'userId'});
 Category.belongsTo(User, {foreignKey: 'categoryCreatorId', targetKey: 'userId'});
 User.hasMany(Genre, {foreignKey: 'genreCreatorId', sourceKey: 'userId'});
 Genre.belongsTo(User, {foreignKey: 'genreCreatorId', targetKey: 'userId'});
+Category.hasMany(Genre, {foreignKey: 'genreCategoryId', sourceKey: 'categoryId'});
+Genre.belongsTo(Category, {foreignKey: 'genreCategoryId', targetKey: 'categoryId'});
+User.hasMany(Choice, {foreignKey: 'choiceCreatorId', sourceKey: 'userId'});
+Choice.belongsTo(User, {foreignKey: 'choiceCreatorId', targetKey: 'userId'});
+Genre.hasMany(Choice, {foreignKey: 'choiceGenreId', sourceKey: 'genreId'});
+Choice.belongsTo(Genre, {foreignKey: 'choiceGenreId', targetKey: 'genreId'});
 
 module.exports = {
   User : User,
-  Choice: Choice,
   Category: Category,
   Genre: Genre,
+  Choice: Choice,
   dbSync : sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
