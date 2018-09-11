@@ -25,7 +25,7 @@ const Choice = sequelize.define('choice', {
 
 const Category = sequelize.define('category', {
   categoryId: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
-  categoryCreatorId: {type: Sequelize.INTEGER, references: {model: 'users', key: 'userId'}},
+  categoryCreatorId: Sequelize.INTEGER,
   categoryName: {type: Sequelize.STRING, unique: true},
 });
 
@@ -40,6 +40,8 @@ User.hasMany(Choice, {foreignKey: 'choiceCreatorId', sourceKey: 'userId'});
 Choice.belongsTo(User, {foreignKey: 'choiceCreatorId', targetKey: 'userId'});
 Genre.hasMany(Choice, {foreignKey: 'choiceGenreId', sourceKey: 'genreId'});
 Choice.belongsTo(Genre, {foreignKey: 'choiceGenreId', targetKey: 'genreId'});
+User.hasMany(Category, {foreignKey: 'categoryCreatorId', sourceKey: 'userId'});
+Category.belongsTo(User, {foreignKey: 'categoryCreatorId', targetKey: 'userId'});
 
 module.exports = {
   User : User,
