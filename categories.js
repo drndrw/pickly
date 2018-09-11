@@ -5,9 +5,6 @@ var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
-models.Genre.belongsTo(models.Category, {foreignKey: 'genreCategoryId', sourceKey: 'categoryId'});
-models.Category.hasMany(models.Genre, {targetKey: 'categoryId', foreignKey: 'genreCategoryId'});
-
 // show all categories
 router.get('/', middleware.verifyToken(), (req, res) => {
   models.Category.findAll({
