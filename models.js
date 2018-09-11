@@ -20,7 +20,7 @@ const Choice = sequelize.define('choice', {
     choiceState: Sequelize.STRING,
     choiceZip: Sequelize.INTEGER,
     choicePricing: Sequelize.INTEGER,
-    choiceGenreId: {type: Sequelize.INTEGER, references: {model: 'genres', key: 'genreId'}}
+    choiceGenreId: Sequelize.INTEGER
 });
 
 const Category = sequelize.define('category', {
@@ -38,6 +38,8 @@ const Genre = sequelize.define('genre', {
 
 User.hasMany(Choice, {foreignKey: 'choiceCreatorId', sourceKey: 'userId'});
 Choice.belongsTo(User, {foreignKey: 'choiceCreatorId', targetKey: 'userId'});
+Genre.hasMany(Choice, {foreignKey: 'choiceGenreId', sourceKey: 'genreId'});
+Choice.belongsTo(Genre, {foreignKey: 'choiceGenreId', targetKey: 'genreId'});
 
 module.exports = {
   User : User,
