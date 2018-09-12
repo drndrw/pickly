@@ -4,6 +4,16 @@ var middleware = require('./middleware.js');
 var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+var config = require('./config.js');
+
+// delete genre
+router.delete('/:genreId', middleware.verifyToken(config.permissions.admin), middleware.checkGenre, (req, res) => {
+  models.Genre.destroy({
+    where: {genreId: req.params.genreId}
+  }).then(response => {
+    res.json({status: 'Deleted', genreId: req.params.genreId});
+  })
+});
 
 // show all genres
 router.get('/', middleware.verifyToken(), (req, res) => {
