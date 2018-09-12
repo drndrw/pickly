@@ -11,7 +11,7 @@ router.delete('/:genreId', middleware.verifyToken(config.permissions.admin), mid
   models.Genre.destroy({
     where: {genreId: req.params.genreId}
   }).then(response => {
-    res.json({status: 'Deleted', genreId: req.params.genreId});
+    res.json({status: 'Deleted', genreId: parseInt(req.params.genreId)});
   })
 });
 

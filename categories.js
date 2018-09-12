@@ -11,7 +11,7 @@ router.delete('/:categoryId', middleware.verifyToken(config.permissions.admin), 
   models.Category.destroy({
     where: {categoryId: req.params.categoryId}
   }).then(response => {
-    res.json({status: 'Deleted', categoryId: req.params.categoryId});
+    res.json({status: 'Deleted', categoryId: parseInt(req.params.categoryId)});
   })
 });
 

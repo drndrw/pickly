@@ -96,7 +96,7 @@ router.delete('/:userId', middleware.verifyToken(config.permissions.admin), midd
   models.User.destroy({
     where: {userId: req.params.userId}
   }).then(response => {
-    res.json({status: 'Deleted', userId: req.params.userId});
+    res.json({status: 'Deleted', userId: parseInt(req.params.userId)});
   })
 });
 

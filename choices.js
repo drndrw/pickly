@@ -11,7 +11,7 @@ router.delete('/:choiceId', middleware.verifyToken(config.permissions.admin), mi
   models.Choice.destroy({
     where: {choiceId: req.params.choiceId}
   }).then(response => {
-    res.json({status: 'Deleted', choiceId: req.params.choiceId});
+    res.json({status: 'Deleted', choiceId: parseInt(req.params.choiceId)});
   })
 });
 
