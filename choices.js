@@ -4,6 +4,16 @@ var middleware = require('./middleware.js');
 var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+var config = require('./config.js');
+
+// delete choice
+router.delete('/:choiceId', middleware.verifyToken(config.permissions.admin), middleware.checkChoice, (req, res) => {
+  models.Choice.destroy({
+    where: {choiceId: req.params.choiceId}
+  }).then(response => {
+    res.json({status: 'Deleted', choiceId: req.params.choiceId});
+  })
+});
 
 // show all choices
 router.get('/', middleware.verifyToken(), (req, res) => {
