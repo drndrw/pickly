@@ -5,6 +5,15 @@ var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
+// delete category
+router.delete('/:categoryId', middleware.verifyToken(config.permissions.admin), middleware.checkCategory, (req, res) => {
+  models.Category.destroy({
+    where: {categoryId: req.params.categoryId}
+  }).then(response => {
+    res.json({status: 'Deleted', categoryId: req.params.categoryId});
+  })
+});
+
 // show all categories
 router.get('/', middleware.verifyToken(), (req, res) => {
   models.Category.findAll({
