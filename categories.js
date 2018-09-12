@@ -4,6 +4,7 @@ var middleware = require('./middleware.js');
 var models = require('./models.js');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
+var config = require('./config.js');
 
 // delete category
 router.delete('/:categoryId', middleware.verifyToken(config.permissions.admin), middleware.checkCategory, (req, res) => {
